@@ -96,7 +96,7 @@
 	GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION;
 	GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION;
 	GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.20.39' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION;
-	DROP USER ''@'zabbixserver';
+	DROP USER 'root'@'zabbixserver';
 	DROP USER ''@'localhost';
 	DROP USER 'root'@'::1';
 	FLUSH PRIVILEGES;
@@ -154,6 +154,17 @@
 		```sh
 		DBPassword=Welcome123
 		```
+		
+	- Sửa dòng `DBName` (tên của Database cho zabbix đã tạo ở trên. 
+		```sh
+		DBName=zabbixdb
+		```
+		
+	- Sửa dòng `DBUser` là tên của user 
+		```sh
+		DBUser=zabbixuser
+		```
+
 
 ### 2.3. Cấu hình để zabbix server giám sát chính nó.
 
