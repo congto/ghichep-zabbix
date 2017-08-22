@@ -46,7 +46,7 @@
 	yum -y install mariadb-server
 	```
 
-- Cấu hình mariadb 
+#### 2.2.1. Cấu hình mariadb 
  - Sửa file `/etc/my.cnf` bằng cách add thêm dòng dưới 
 		```sh
 		[mysqld]
@@ -84,18 +84,29 @@
 		Aug 22 16:47:55 zabbixserver systemd[1]: Started MariaDB database server.
 		```	
 	
-	
-		
-- Đăng nhập vào mariadb với quyền root của database
+- Đăng nhập vào mariadb với quyền `root` của database và thực hiện phân quyền truy nhập vào database.
 	```sh
 	mysql -u root -p
 	```
-	- Ấn Enter vì database chưa được khai báo mật khẩu.
-	- Để thoát khỏi cửa sổ đăng nhập của mariadb thực hiện lệnh exit
-		```sh
-		MariaDB [(none)]> exit
-		```
+	- Ấn Enter vì database chưa được khai báo mật khẩu. Màn hình sẽ chuyển sang chế độ thao tác với database
 	
+- Khai báo mật khẩu cho tài khoản `root` của database. Lưu ý đây không phải là tài khoản root để ssh vào máy chủ.
+	```sh
+	GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION ;FLUSH PRIVILEGES;
+	GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION ;FLUSH PRIVILEGES;
+	GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION ;FLUSH PRIVILEGES;
+	GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.20.39' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION ;FLUSH PRIVILEGES;
+	DROP USER ''@'$CTL1_HOSTNAME';
+	DROP USER ''@'localhost';
+	DROP USER 'root'@'::1';
+	```
+
+- Để thoát khỏi cửa sổ đăng nhập của mariadb thực hiện lệnh exit
+	```sh
+	MariaDB [(none)]> exit
+	```
+
+#### 2.2.2. Tải và cài đặt zabbix	
 - Tải gói chứa repos của zabbix 3.0
 	```sh
 	yum -y install php-mysql php-gd php-xml php-bcmath
@@ -107,16 +118,16 @@
 	yum -y install zabbix-get zabbix-server-mysql zabbix-web-mysql zabbix-agent 
 	```
 
-- Đăng nhập vào mysql và tạo database cho zabbix server. Lúc này không cần nhập mật khẩu vì lúc cài đặt mariadb-server chúng ta không khai báo mật khẩu. 
+- Đăng nhập vào mysql và tạo database cho zabbix server. Lúc này cần nhập mật khẩu của tài khoản root của database đã được phân quyền ở bước trên. 
 	```sh
 	mysql -u root -p 
 	```
 	
-- Tạo database tên tên là `zabbix`, tài khoản truy cập là `zabbix` và mật khẩu là `Welcome123`
+- Tạo database tên tên là `zabbixdb`, tài khoản truy cập là `zabbixuser` và mật khẩu là `Welcome123`
 	```sh	
-	create database zabbix; 
-	grant all privileges on zabbix.* to zabbix@'localhost' identified by 'Welcome123'; 
-	grant all privileges on zabbix.* to zabbix@'%' identified by 'Welcome123'; 
+	create database zabbixdb; 
+	grant all privileges on zabbixdb.* to zabbixuser@'localhost' identified by 'Welcome123'; 
+	grant all privileges on zabbixdb.* to zabbixuser@'%' identified by 'Welcome123'; 
 	flush privileges; 
 	
 	exit
