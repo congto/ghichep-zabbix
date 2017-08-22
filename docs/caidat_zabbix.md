@@ -1,15 +1,15 @@
 ## Cài đặt zabbix
 
-## Yêu cầu cài đặt
+## 1. Yêu cầu cài đặt
 - OS: CentOS 7.x 64 bit
 	- IP addresses: 192.168.20.39
 	- Subnet mask: 255.255.255.0
 	- Gateway: 192.168.20.254
 - Zabbix 3.0
 
-## Các bước triển khai
+## 2. Các bước triển khai
 
-### Khai báo IP, hostname 
+### 2.1. Khai báo IP, hostname 
 - Thiết lập hostname cho máy chủ zabbix
 	```sh
 	hostnamectl set-hostname zabbixserver
@@ -37,7 +37,7 @@
 	init 6
 	```
 
-### Thực hiện cài đặt zabbix 
+### 2.2. Thực hiện cài đặt zabbix 
 
 - Cài các gói bổ trợ: http, php, mariadb-server
 	```sh
