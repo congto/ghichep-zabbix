@@ -9,6 +9,7 @@
 
 ## Các bước triển khai
 
+### Khai báo IP, hostname 
 - Thiết lập hostname cho máy chủ zabbix
 	```sh
 	hostnamectl set-hostname zabbixserver
@@ -22,6 +23,21 @@
 	nmcli con modify ens160 ipv4.method manual
 	nmcli con modify ens160 connection.autoconnect yes
 	```
+	
+- Thiết lập các chính sách về Iptables và công cụ quản lý card mạng của CentOS
+	```sh
+	sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+	sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+	sudo systemctl disable firewalld
+	sudo systemctl stop firewalld
+	sudo systemctl stop NetworkManager
+	sudo systemctl disable NetworkManager
+	sudo systemctl enable network
+	sudo systemctl start network
+	init 6
+	```
+
+### Thực hiện cài đặt zabbix 
 
 - Cài các gói bổ trợ: http, php, mariadb-server
 	```sh
