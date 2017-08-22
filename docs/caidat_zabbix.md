@@ -7,8 +7,7 @@
 ## Các bước triển khai
 
 
-- Cài các gói bổ trợ
-
+- Cài các gói bổ trợ: http, php, mariadb-server
 	```sh
 	yum -y install httpd
 	yum -y install php php-mbstring php-pear
@@ -27,7 +26,7 @@
 	yum -y install zabbix-get zabbix-server-mysql zabbix-web-mysql zabbix-agent 
 	```
 
-- Đăng nhập vào mysql và tạo database cho zabbix server
+- Đăng nhập vào mysql và tạo database cho zabbix server. Lúc này không cần nhập mật khẩu vì lúc cài đặt mariadb-server chúng ta không khai báo mật khẩu. 
 	```sh
 	mysql -u root -p 
 	```
@@ -51,13 +50,13 @@
 	```
 	- Cần nhập mật khẩu đã tạo cho zabbix ở trên lúc trước.
 
-- Cấu hình và khởi động zabbix server
+- Sửa các dòng dưới trong file `/etc/zabbix/zabbix_server.conf`
 
-	- Sửa dòng `DBHost` với giá trị là 
+	- Sửa dòng `DBHost`
 		```sh
 		DBHost=localhost
 		```
-	- Sửa dòng `DBPassword` với giá trị là
-	```sh
-	DBPassword=Welcome123
-	```
+	- Sửa dòng `DBPassword`
+		```sh
+		DBPassword=Welcome123
+		```
