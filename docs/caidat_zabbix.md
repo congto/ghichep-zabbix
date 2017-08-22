@@ -2,17 +2,32 @@
 
 ## Yêu cầu cài đặt
 - OS: CentOS 7.x 64 bit
+	- IP addresses: 192.168.20.39
+	- Subnet mask: 255.255.255.0
+	- Gateway: 192.168.20.254
 - Zabbix 3.0
 
 ## Các bước triển khai
 
+- Thiết lập hostname cho máy chủ zabbix
+	```sh
+	hostnamectl set-hostname zabbixserver
+	```
+	
+- Thiết lập IP cho máy chủ, trong môi trường LAB này ta sẽ thiếp lập ip cho card `ens160`
+	```sh
+	nmcli con modify ens160 ipv4.addresses 192.168.20.39/24
+	nmcli con modify ens160 ipv4.gateway 192.168.20.254
+	nmcli con modify ens160 ipv4.dns 8.8.8.8
+	nmcli con modify ens160 ipv4.method manual
+	nmcli con modify ens160 connection.autoconnect yes
+	```
 
 - Cài các gói bổ trợ: http, php, mariadb-server
 	```sh
 	yum -y install httpd
 	yum -y install php php-mbstring php-pear
 	yum -y install mariadb-server
-
 	```
 
 - Tải gói chứa repos của zabbix 3.0
@@ -37,6 +52,7 @@
 	grant all privileges on zabbix.* to zabbix@'localhost' identified by 'Welcome123'; 
 	grant all privileges on zabbix.* to zabbix@'%' identified by 'Welcome123'; 
 	flush privileges; 
+	
 	exit
 	```
 
@@ -60,3 +76,27 @@
 		```sh
 		DBPassword=Welcome123
 		```
+
+### Cấu hình để zabbix server giám sát chính nó.
+
+- Sửa các dòng dưới trong file `/etc/zabbix/zabbix_agentd.conf`
+	```sh
+	Server=127.0.0.1
+	ServerActive=127.0.0.1
+	Hostname=zabbixserver
+	```
+
+- Kích hoạt zabbix server 
+	```sh
+	systemctl start zabbix-agent 
+	systemctl enable zabbix-agent 
+	```
+	
+- Khởi động htttp
+	```sh
+	systemctl restart httpd 
+	```
+	
+### Thiếp lập cấu hình ban đầu cho zabbix server
+
+- Truy cập vào máy chủ zabbix bằng ip và khai báo các cấu hình. 
