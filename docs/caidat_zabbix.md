@@ -38,7 +38,7 @@
 	```
 
 ### 2.2. Thực hiện cài đặt zabbix 
-
+- Đăng nhập vào máy chủ zabbix với quyền root và thực hiện các bước dưới.
 - Cài các gói bổ trợ: http, php, mariadb-server
 	```sh
 	yum -y install httpd
@@ -46,6 +46,56 @@
 	yum -y install mariadb-server
 	```
 
+- Cấu hình mariadb 
+ - Sửa file `/etc/my.cnf` bằng cách add thêm dòng dưới 
+		```sh
+		[mysqld]
+		character-set-server=utf8
+		```
+	- Khởi động mariadb
+		```sh
+		systemctl start mariadb
+		systemctl enable mariadb
+		```
+	- Kiểm tra trạng thái của service mariadb bằng lệnh
+		```sh
+		systemctl status mariadb
+		```
+	- Kết quả như dưới là ok, nếu chưa ổn thì kiểm tra lại các bước trên. 
+		```sh
+		[root@zabbixserver ~]# systemctl status mariadb
+		● mariadb.service - MariaDB database server
+			 Loaded: loaded (/usr/lib/systemd/system/mariadb.service; enabled; vendor preset: disabled)
+			 Active: active (running) since Tue 2017-08-22 16:47:55 +07; 13s ago
+		 Main PID: 1298 (mysqld_safe)
+			 CGroup: /system.slice/mariadb.service
+							 ├─1298 /bin/sh /usr/bin/mysqld_safe --basedir=/usr
+							 └─1457 /usr/libexec/mysqld --basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib64/mysql/plugin --log-error=/var/log/mariadb/mariadb.log --pid-...
+
+		Aug 22 16:47:53 zabbixserver mariadb-prepare-db-dir[1220]: Alternatively you can run:
+		Aug 22 16:47:53 zabbixserver mariadb-prepare-db-dir[1220]: '/usr/bin/mysql_secure_installation'
+		Aug 22 16:47:53 zabbixserver mariadb-prepare-db-dir[1220]: which will also give you the option of removing the test
+		Aug 22 16:47:53 zabbixserver mariadb-prepare-db-dir[1220]: databases and anonymous user created by default.  This is
+		Aug 22 16:47:53 zabbixserver mariadb-prepare-db-dir[1220]: strongly recommended for production servers.
+		Aug 22 16:47:53 zabbixserver mariadb-prepare-db-dir[1220]: See the MariaDB Knowledgebase at http://mariadb.com/kb or the
+		Aug 22 16:47:53 zabbixserver mariadb-prepare-db-dir[1220]: MySQL manual for more instructions.
+		Aug 22 16:47:53 zabbixserver mysqld_safe[1298]: 170822 16:47:53 mysqld_safe Logging to '/var/log/mariadb/mariadb.log'.
+		Aug 22 16:47:53 zabbixserver mysqld_safe[1298]: 170822 16:47:53 mysqld_safe Starting mysqld daemon with databases from /var/lib/mysql
+		Aug 22 16:47:55 zabbixserver systemd[1]: Started MariaDB database server.
+		```	
+	
+	
+		
+- Đăng nhập vào mariadb với quyền root của database
+	```sh
+	mysql -u root -p
+	```
+	- Ấn Enter vì database chưa được khai báo mật khẩu.
+	- Để thoát khỏi cửa sổ đăng nhập của mariadb thực hiện lệnh exit
+		```sh
+		MariaDB [(none)]> exit
+		```
+	
 - Tải gói chứa repos của zabbix 3.0
 	```sh
 	yum -y install php-mysql php-gd php-xml php-bcmath
@@ -93,7 +143,7 @@
 		DBPassword=Welcome123
 		```
 
-### Cấu hình để zabbix server giám sát chính nó.
+### 2.3. Cấu hình để zabbix server giám sát chính nó.
 
 - Sửa các dòng dưới trong file `/etc/zabbix/zabbix_agentd.conf`
 	```sh
@@ -113,6 +163,6 @@
 	systemctl restart httpd 
 	```
 	
-### Thiếp lập cấu hình ban đầu cho zabbix server
+## 3. Thiếp lập cấu hình ban đầu cho zabbix server
 
 - Truy cập vào máy chủ zabbix bằng ip và khai báo các cấu hình. 
