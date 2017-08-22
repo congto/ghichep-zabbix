@@ -90,15 +90,16 @@
 	```
 	- Ấn Enter vì database chưa được khai báo mật khẩu. Màn hình sẽ chuyển sang chế độ thao tác với database
 	
-- Khai báo mật khẩu cho tài khoản `root` của database. Lưu ý đây không phải là tài khoản root để ssh vào máy chủ.
+- Khai báo mật khẩu cho tài khoản `root` của database. Lưu ý đây không phải là tài khoản root để ssh vào máy chủ. Mật khẩu sử dụng để truy cập database là `Welcome123`
 	```sh
-	GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION ;FLUSH PRIVILEGES;
-	GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION ;FLUSH PRIVILEGES;
-	GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION ;FLUSH PRIVILEGES;
-	GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.20.39' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION ;FLUSH PRIVILEGES;
+	GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION;
+	GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION;
+	GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION;
+	GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.20.39' IDENTIFIED BY 'Welcome123' WITH GRANT OPTION;
 	DROP USER ''@'$CTL1_HOSTNAME';
 	DROP USER ''@'localhost';
 	DROP USER 'root'@'::1';
+	FLUSH PRIVILEGES;
 	```
 
 - Để thoát khỏi cửa sổ đăng nhập của mariadb thực hiện lệnh exit
