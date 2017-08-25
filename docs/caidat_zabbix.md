@@ -166,26 +166,39 @@
 		```
 
 
-### 2.3. Cấu hình để zabbix server giám sát chính nó.
-
-- Sửa các dòng dưới trong file `/etc/zabbix/zabbix_agentd.conf`
-	```sh
-	Server=127.0.0.1
-	ServerActive=127.0.0.1
-	Hostname=zabbixserver
-	```
+### 2.3. Cấu hình để khởi động zabbix server và giám sát chính nó.
 
 - Kích hoạt zabbix server 
 	```sh
-	systemctl start zabbix-agent 
-	systemctl enable zabbix-agent 
+	systemctl start zabbix-server 
+	systemctl enable zabbix-server 
 	```
-	
+
+- Khai báo cấu hình cho zabbix trong file cấu hình của httpd 
+	```sh
+	sed -i -e 's/# php_value date.timezone Europe\/Riga/php_value date.timezone Asia\/Ho_Chi_Minh/g' /etc/httpd/conf.d/zabbix.conf
+	```
+
 - Khởi động htttp
 	```sh
 	systemctl restart httpd 
 	```
+
+- Sửa các dòng dưới trong file `/etc/zabbix/zabbix_agentd.conf` bằng lệnh dưới
+	```sh
+	sed -i -e 's/Hostname=Zabbix server/Hostname=ZabbixServer/g' /etc/zabbix/zabbix_agentd.conf
+	```
+	
+- Kích hoạt zabbix-agent để zabbix server giám sát chính nó.
+	```sh
+	systemctl start zabbix-agent 
+	systemctl enable zabbix-agent 
+	```
+
 	
 ## 3. Thiếp lập cấu hình ban đầu cho zabbix server
 
-- Truy cập vào máy chủ zabbix bằng ip và khai báo các cấu hình. 
+- Truy cập vào máy chủ zabbix bằng ip và khai báo các thiết lập cho zabbix
+
+## 4. Add host zabbix-server để giám sát.
+
